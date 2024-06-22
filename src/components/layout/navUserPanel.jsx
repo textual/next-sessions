@@ -1,18 +1,35 @@
-"use client";
-import { useAuth } from "@/contexts/auth";
-import Link from "next/link";
+'use client';
+import { useAuth } from '@/contexts/auth';
+
+import { UserCircleIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
+
+import Link from 'next/link';
 const NavUserPanel = () => {
   const { isAuthenticated, user } = useAuth();
 
   return (
-    <div className="ml-2">
+    <div className='ml-2'>
       {Boolean(isAuthenticated) ? (
-        <Link href="/dashboard">{user?.name}</Link>
+        <div className='flex'>
+          {user.image ? (
+            <Image
+              src={user.image}
+              alt='profile image'
+              height='20'
+              width='20'
+            />
+          ) : (
+            <UserCircleIcon className='h-6 w-6 mr-1' />
+          )}
+
+          <Link href='/dashboard'>{user?.name}</Link>
+        </div>
       ) : (
         <>
-          <Link href="/auth/login">login</Link>
-          {" | "}
-          <Link href="/auth/register">register</Link>
+          <Link href='/auth/login'>login</Link>
+          {' | '}
+          <Link href='/auth/register'>register</Link>
         </>
       )}
     </div>
