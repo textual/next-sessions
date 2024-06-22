@@ -18,12 +18,15 @@ const NavUserPanel = () => {
               alt='profile image'
               height='20'
               width='20'
+              className='rounded-full'
             />
           ) : (
-            <UserCircleIcon className='h-6 w-6 mr-1' />
+            <UserCircleIcon className='h-6 w-6' />
           )}
 
-          <Link href='/dashboard'>{user?.name}</Link>
+          <Link href='/dashboard' className='ml-1'>
+            {user?.name}
+          </Link>
         </div>
       ) : (
         <>
