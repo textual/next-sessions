@@ -9,56 +9,16 @@ import {
 import { Button } from "../button";
 import { useFormState, useFormStatus } from "react-dom";
 import { authenticate } from "@/lib/authActions";
-import { apiInstance } from "@/lib/axios";
-import { useState } from "react";
-import { useAuth } from "@/contexts/auth";
-import { redirect } from "next/navigation";
-import { useRouter } from "next/navigation";
 
-export default function LoginForm() {
-  // const [error, dispatch] = useFormState(authenticate, undefined);
-  const { setLoggedInUser } = useAuth();
-  const [pending, setPending] = useState(false);
-  const [error, setError] = useState();
-  const router = useRouter();
+export default function LoginFormAction() {
+  const [error, dispatch] = useFormState(authenticate, undefined);
 
-  const handleSubmit = async (e) => {
-    try {
-      e.preventDefault();
-      setPending(true);
-      const formData = new FormData(e.target);
-      const email = formData.get("email");
-      const password = formData.get("password");
-      console.log("formData", email, password);
-      const result = await apiInstance.post("/api/auth/login", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      // const result = await apiInstance.post('/api/auth/login', {
-      //   email,
-      //   password,
-      // });
-      console.log("result ", result);
-      console.log("let auth know and redirect");
-      await setLoggedInUser(result.data);
-      console.log("now redirect");
-      router.push("/dashboard");
-    } catch (error) {
-      // console.log(
-      //   "login form returns specific error ",
-      //   error.response.data.error
-      // );
-      console.log("login form returns error ", error);
-      setError(error?.response?.data?.error);
-    } finally {
-      setPending(false);
-    }
-  };
+  // const [error, setError] = useState();
+
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-        <div className="sm:col-span-4">
+    <form action={dispatch} className="border flex flex-grow">
+      <div className="mt-10 flex flex-col gap-x-6 gap-y-8 ">
+        <div>
           <label
             htmlFor="email"
             className="block text-sm font-medium leading-6 text-gray-900"
@@ -79,7 +39,7 @@ export default function LoginForm() {
             </div>
           </div>
         </div>
-        <div className="sm:col-span-4">
+        <div>
           <label
             htmlFor="password"
             className="block text-sm font-medium leading-6 text-gray-900"
@@ -100,17 +60,15 @@ export default function LoginForm() {
           </div>
         </div>
         {error && (
-          <div className="sm:col-span-4 w-[300px]">
+          <div>
             <div className="bg-red-100 text-red-950 rounded-lg py-1.5 pl-2 flex align-middle">
               <ExclamationCircleIcon className="h-5 w-5 text-red-950 mr-2" />
               {error}
             </div>
           </div>
         )}
-        <div className="sm:col-span-4">
-          <Button className="mt-4 w-[200px]" aria-disabled={pending}>
-            Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
-          </Button>
+        <div>
+          <LoginButton />
         </div>
       </div>
     </form>

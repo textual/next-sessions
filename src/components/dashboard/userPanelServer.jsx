@@ -6,7 +6,7 @@ const UserPanelServer = async () => {
 
   return (
     <div className="m-2 border-2 rounded-md p-2">
-      <h1>UserPanelServer</h1>
+      <h1>UserPanel - Server</h1>
       {/* <p>user {JSON.stringify(user, null, 2)}</p> */}
       <JsonViewer jsonData={user} />
       <p>user expiry: {user_expiry}</p>

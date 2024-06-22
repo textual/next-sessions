@@ -3,15 +3,16 @@ import { BASE_URL, NEXT_URL } from "@/lib/constants";
 import { getSession, getRefresh, getVerify, logout } from "@/lib/authActions";
 
 export async function middleware(request) {
-  let sessionCookie = request.cookies.get("session");
-  // const session = await getSession();
+  // let sessionCookie = request.cookies.get("session");
 
-  console.log("running middlware - sessionCookie", sessionCookie);
-  // console.log("running middlware - session", session);
-  if (request.nextUrl.pathname.startsWith("/dashboard") && !sessionCookie) {
+  const session = await getSession();
+
+  // console.log("running middlware - sessionCookie", sessionCookie);
+  console.log("running middlware - session", session);
+  if (request.nextUrl.pathname.startsWith("/dashboard") && !session) {
     return NextResponse.redirect(NEXT_URL + "/auth/login");
   }
-  if (request.nextUrl.pathname.startsWith("/auth/login") && sessionCookie) {
+  if (request.nextUrl.pathname.startsWith("/auth/login") && session) {
     return NextResponse.redirect(NEXT_URL + "/dashboard");
   }
   //   if (request.nextUrl.pathname.startsWith('/about')) {

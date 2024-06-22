@@ -15,7 +15,7 @@ import { useAuth } from "@/contexts/auth";
 import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
 
-export default function LoginForm() {
+export default function LoginFormSubmit() {
   // const [error, dispatch] = useFormState(authenticate, undefined);
   const { setLoggedInUser } = useAuth();
   const [pending, setPending] = useState(false);
@@ -56,9 +56,9 @@ export default function LoginForm() {
     }
   };
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-        <div className="sm:col-span-4">
+    <form onSubmit={handleSubmit} className="border flex flex-grow">
+      <div className="mt-10 flex flex-col gap-x-6 gap-y-8">
+        <div>
           <label
             htmlFor="email"
             className="block text-sm font-medium leading-6 text-gray-900"
@@ -79,7 +79,7 @@ export default function LoginForm() {
             </div>
           </div>
         </div>
-        <div className="sm:col-span-4">
+        <div>
           <label
             htmlFor="password"
             className="block text-sm font-medium leading-6 text-gray-900"

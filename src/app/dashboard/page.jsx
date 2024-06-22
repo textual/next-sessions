@@ -9,10 +9,10 @@ const DashboardPage = () => {
       <h1>DashboardPage</h1>
       <p>intended to be secure</p>
       <hr />
-      <div className="columns-2">
-        <UserPanelServer />
-        <UserPanelCilent />
-      </div>
+      {/* <div className="columns-2 flex justify-between"> */}
+      <UserPanelServer />
+      <UserPanelCilent />
+      {/* </div> */}
       <LogoutButton />
     </div>
   );

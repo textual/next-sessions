@@ -54,8 +54,12 @@ export async function authenticate(prevState, formData) {
     // if (password !== "ADMIN") {
     //   throw new Error("incorrect login");
     // }
-    const response = await axiosInstance.post("/auth/entry", entry_object);
-    console.log("write cookies with ", response.data);
+    // curl -i -X POST http://localhost:8200/auth/entry -H "Content-Type: application/json" -d '{"email":"test@email.com", "password":"g0Racing!", mode: "signin"}'
+
+    const response = await axiosInstance.post("/auth/entry", entry_object, {
+      withCredentials: true,
+    });
+    // console.log("write cookies with ", response.data);
     await processTokens(response.data);
   } catch (error) {
     if (error?.response?.data) {
@@ -68,7 +72,7 @@ export async function authenticate(prevState, formData) {
   redirect(BASE_URL + "/dashboard");
 }
 
-async function processTokens({ accessToken, refreshToken }) {
+export async function processTokens({ accessToken, refreshToken }) {
   const d_access = await decrypt(accessToken, secretKey);
   const d_refresh = await decrypt(refreshToken, refreshKey);
   console.log("write access token ", d_access);
@@ -99,7 +103,8 @@ async function processTokens({ accessToken, refreshToken }) {
   const access_expires = new Date(Date.now() + jwtExpiryTime);
   // const refresh_expires = new Date((d_refresh.exp + refreshExpirytime) * 1000); // + jwtExpiryTime);
   // const refresh_expires = (d_refresh.exp + refreshExpirytime) * 1000; // + jwtExpiryTime);
-  const refresh_expires = new Date(Date.now() + d_refresh.exp);
+  // const refresh_expires = new Date(Date.now() + d_refresh.exp);
+  const refresh_expires = new Date(Date.now() + refreshExpirytime); // + jwtExpiryTime);
 
   console.log(
     "new access token set to expire ",
@@ -125,6 +130,7 @@ async function processTokens({ accessToken, refreshToken }) {
     expires: refresh_expires,
     httpOnly: true,
   });
+  return user;
 }
 async function encrypt(payload, expires, key) {
   return await new SignJWT(payload)

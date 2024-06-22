@@ -18,9 +18,20 @@ export const AuthProvider = ({ children, initialAuthState }) => {
 
   const [user, setUser] = useState(undefined);
 
+  const logOutUser = () => {
+    console.log("clear user");
+    setUser(null);
+    setIsAuthenticated(false);
+  };
+  const setLoggedInUser = (user) => {
+    console.log("set user to", user);
+    setUser(user);
+    setIsAuthenticated(true);
+  };
   useEffect(() => {
     const checkUser = async () => {
       try {
+        console.log("ui checking user");
         const result = await apiInstance.get("/api/auth/check");
         setUser(result.data.user);
         setIsAuthenticated(Boolean(result.data.user));
@@ -33,7 +44,9 @@ export const AuthProvider = ({ children, initialAuthState }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, setUser }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, user, setLoggedInUser, logOutUser }}
+    >
       {children}
     </AuthContext.Provider>
   );
