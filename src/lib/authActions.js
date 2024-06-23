@@ -24,6 +24,13 @@ export async function logout() {
   console.log("cookjes deleted");
 }
 
+export async function getSessionCookie() {
+  const session = cookies().get("session")?.value;
+  console.log("auth actions getSessionCookie says", session);
+  if (!session) return null;
+  return session;
+}
+
 export async function getSession() {
   const session = cookies().get("session")?.value;
   // console.log("auth actions session says", session);
@@ -59,8 +66,20 @@ export async function authenticate(prevState, formData) {
     const response = await axiosInstance.post("/auth/entry", entry_object, {
       withCredentials: true,
     });
-    // console.log("write cookies with ", response.data);
+    console.log("write cookies with ", response.data);
     await processTokens(response.data);
+
+    // axiosInstance.defaults.headers.common[
+    //   "Authorization"
+    // ] = `Bearer ${response.data.accessToken}`;
+
+    // axiosInstance.interceptors.request.use((config) => {
+    //   // const session = await getSession();
+    //   if (!config.headers["Authorization"]) {
+    //     config.headers["Authorization"] = `Bearer ${response.data.accessToken}`;
+    //   }
+    //   return config;
+    // });
   } catch (error) {
     if (error?.response?.data) {
       return error.response.data.error;

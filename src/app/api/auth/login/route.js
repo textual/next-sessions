@@ -18,6 +18,19 @@ export async function POST(request, res) {
     // }
     const response = await axiosInstance.post("/auth/entry", entry_object);
     console.log("write cookies with ", response.data);
+
+    axiosInstance.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${response.data.accessToken}`;
+
+    // axiosInstance.interceptors.request.use((config) => {
+    //   // const session = await getSession();
+    //   if (!config.headers["Authorization"]) {
+    //     config.headers["Authorization"] = `Bearer ${response.data.accessToken}`;
+    //   }
+    //   return config;
+    // });
+
     const user = await processTokens(response.data);
 
     return NextResponse.json(user);
